@@ -1,0 +1,18 @@
+{
+	"version": 0,
+	"gopm": {
+		"enable": false,
+		"install": false
+	},
+	"go_install": true,
+	"watch_ext": [
+		".ini"
+	],
+	"dir_structure": {
+		"controllers": "",
+		"models": "",
+		"others": [
+			"conf"
+		]
+	}
+}
