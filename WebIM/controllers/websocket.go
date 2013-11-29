@@ -19,7 +19,16 @@ type WebSocketController struct {
 	baseController
 }
 
-// Join method handles GET requests for WebSocketController.
-func (this *WebSocketController) Join() {
-	this.Ctx.WriteString("WebSocket")
+// Get method handles GET requests for WebSocketController.
+func (this *WebSocketController) Get() {
+	// Safe check.
+	uname := this.GetString("uname")
+	if len(uname) == 0 {
+		this.Redirect("/", 302)
+		return
+	}
+
+	this.TplNames = "websocket.html"
+	this.Data["IsWebSocket"] = true
+	this.Data["UserName"] = uname
 }

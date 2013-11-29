@@ -40,7 +40,7 @@ func main() {
 	beego.Router("/lp/fetch", &controllers.LongPollingController{}, "get:Fetch")
 
 	// WebSocket.
-	beego.Router("/ws", &controllers.WebSocketController{}, "get:Join")
+	beego.Router("/ws", &controllers.WebSocketController{})
 
 	// Register template functions.
 	beego.AddFuncMap("i18n", i18n.Tr)
