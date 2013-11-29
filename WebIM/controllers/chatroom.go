@@ -18,8 +18,8 @@ import (
 	"container/list"
 	"time"
 
-	"code.google.com/p/go.net/websocket"
 	"github.com/astaxie/beego"
+	"github.com/garyburd/go-websocket/websocket"
 
 	"github.com/beego/samples/WebIM/models"
 )
@@ -37,6 +37,10 @@ func Join(user string, ws *websocket.Conn) {
 	subscribe <- Subscriber{Name: user, Conn: ws}
 }
 
+func Leave(user string) {
+	unsubscribe <- user
+}
+
 type Subscriber struct {
 	Name string
 	Conn *websocket.Conn // Only for WebSocket users; otherwise nil.
@@ -49,14 +53,13 @@ var (
 	unsubscribe = make(chan string, 10)
 	// Send events here to publish them.
 	publish = make(chan models.Event, 10)
-	// For long polling waiting list.
+	// Long polling waiting list.
 	waitingList = list.New()
+	subscribers = list.New()
 )
 
 // This function handles all incoming chan messages.
 func chatroom() {
-	subscribers := list.New()
-
 	for {
 		select {
 		case sub := <-subscribe:
@@ -74,17 +77,8 @@ func chatroom() {
 				ch.Value.(chan bool) <- true
 				waitingList.Remove(ch)
 			}
-			for sub := subscribers.Front(); sub != nil; sub = sub.Next() {
-				// Immediately send event to WebSocket users.
-				// ws := sub.Value.(Subscriber).Conn
-				// if ws != nil {
-				// 	if websocket.JSON.Send(ws, &event) != nil {
-				// 		// User disconnected.
-				// 		unsubscribe <- sub.Value.(Subscriber).Name
-				// 	}
-				// }
-			}
 
+			broadcastWebSocket(event)
 			models.NewArchive(event)
 
 			if event.Type == models.EVENT_MESSAGE {
@@ -94,6 +88,12 @@ func chatroom() {
 			for sub := subscribers.Front(); sub != nil; sub = sub.Next() {
 				if sub.Value.(Subscriber).Name == unsub {
 					subscribers.Remove(sub)
+					// Clone connection.
+					ws := sub.Value.(Subscriber).Conn
+					if ws != nil {
+						ws.Close()
+						beego.Error("WebSocket closed:", unsub)
+					}
 					publish <- newEvent(models.EVENT_LEAVE, unsub, "") // Publish a LEAVE event.
 					break
 				}

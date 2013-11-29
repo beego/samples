@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	APP_VER = "0.0.1.1128"
+	APP_VER = "0.1.0.1129"
 )
 
 func main() {
@@ -41,6 +41,7 @@ func main() {
 
 	// WebSocket.
 	beego.Router("/ws", &controllers.WebSocketController{})
+	beego.Router("/ws/join", &controllers.WebSocketController{}, "get:Join")
 
 	// Register template functions.
 	beego.AddFuncMap("i18n", i18n.Tr)
