@@ -1,0 +1,23 @@
+{{template "base/base.html" .}}
+{{define "head"}}
+<title>{{i18n .Lang "longpolling_chatroom"}} - {{i18n .Lang "app_intro"}}</title>
+{{end}}
+{{define "body"}}
+<div class="container">
+    <h3>{{i18n .Lang "username"}}: <span id="uname">{{.UserName}}</span></h3>
+    <h4>{{i18n .Lang "send_box"}}:</h4>
+    <form class="form-inline">
+        <div class="col-md-6 form-group">
+            <input id="sendbox" type="text" class="form-control" onkeydown="if(event.keyCode==13)return false;" required>
+        </div>
+        <button id="sendbtn" type="button" class="btn btn-default">{{i18n .Lang "Send"}}</button>
+    </form>
+</div>
+
+<div class="container">
+    <h3>{{i18n .Lang "chat_history"}}:</h3>
+    <ul id="chatbox">
+        <li>{{i18n .Lang "welcome"}}</li>
+    </ul>
+</div>
+{{end}}
