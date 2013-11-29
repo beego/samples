@@ -49,6 +49,8 @@ var (
 	unsubscribe = make(chan string, 10)
 	// Send events here to publish them.
 	publish = make(chan models.Event, 10)
+	// For long polling waiting list.
+	waitingList = list.New()
 )
 
 // This function handles all incoming chan messages.
@@ -67,6 +69,11 @@ func chatroom() {
 				beego.Info("Old user:", sub.Name, ";WebSocket:", sub.Conn != nil)
 			}
 		case event := <-publish:
+			// Notify waiting list.
+			for ch := waitingList.Back(); ch != nil; ch = ch.Prev() {
+				ch.Value.(chan bool) <- true
+				waitingList.Remove(ch)
+			}
 			for sub := subscribers.Front(); sub != nil; sub = sub.Next() {
 				// Immediately send event to WebSocket users.
 				// ws := sub.Value.(Subscriber).Conn

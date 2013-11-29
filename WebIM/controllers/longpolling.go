@@ -63,6 +63,15 @@ func (this *LongPollingController) Fetch() {
 	events := models.GetEvents(int(lastReceived))
 	if len(events) > 0 {
 		this.Data["json"] = events
+		this.ServeJson()
+		return
 	}
+
+	// Wait for new message(s).
+	ch := make(chan bool)
+	waitingList.PushBack(ch)
+	<-ch
+
+	this.Data["json"] = models.GetEvents(int(lastReceived))
 	this.ServeJson()
 }
