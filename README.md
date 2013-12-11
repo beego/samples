@@ -7,3 +7,4 @@ This is mainly for beego sample applications, you can either study how to use be
 ## Samples
 
 - [WebIM](WebIM/README.md): Chat room demo based on long polling and WebSocket.
+- [ShortURL](shorturl/README.md): shouturl app based on beego. API applications

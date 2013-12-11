@@ -5,3 +5,4 @@
 ## 示例
 
 - [在线聊天室](WebIM/README_ZH.md)：基于长轮询和 WebSocket 的聊天室。
+- [短域名](shorturl/README_ZH.md):基于beego开发的API应用，短域名服务。
