@@ -1,4 +1,4 @@
-# Shortutl
+# Shorturl
 
 [English](./README.md)
 

@@ -1,4 +1,4 @@
-# Shortutl
+# Shorturl
 
 [中文文档](./README_ZH.md)
 
