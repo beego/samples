@@ -1,0 +1,83 @@
+/*
+ Copyright 2011 The Go Authors.  All rights reserved.
+ Use of this source code is governed by a BSD-style
+ license that can be found in the LICENSE file.
+*/
+
+body {
+	-webkit-font-smoothing:antialiased;
+	width: 80%;
+	max-width: 480px;
+	margin: 0 auto;
+	background: #f8f8f8;
+}
+
+body, input, button {
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	color: #444;
+}
+*:disabled {
+	color: #888;
+}
+
+h1 {
+	text-align: center;
+	font-size: 3em;
+	font-weight: 200;
+	height: 70px;
+}
+
+h2 {
+	font-size: 2em;
+	font-weight: 200;
+}
+
+li {
+	list-style: none;
+	padding: 5px;
+}
+li.done {
+	color: #888;
+	text-decoration: line-through;
+}
+
+li > .checkbox {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	background: white;
+	margin-right: 8px;
+	border-radius: 2px;
+	border: 1px #ddd solid;
+}
+li.done > .checkbox {
+	background: #888;	
+}
+
+.rounded-box {
+	padding: 10px;
+	border-radius: 4px;
+	border: 1px #ddd solid;
+}
+
+.grey {
+	background: #eee;
+}
+
+.charcoal {
+	color: #fff;
+	background: #444;
+}
+
+.spinner {
+	width: 15px;
+	height: 15px;
+	position: fixed;
+	top: 0;
+	right: 0;
+	display: none;
+}
+.spinner.working {
+	display: block;
+}
