@@ -31,7 +31,7 @@ func (this *ShortController) Post() {
 	urlmd5 := models.GetMD5(longurl)
 	beego.Info(urlmd5)
 	if urlcache.IsExist(urlmd5) {
-		result.UrlShort = urlcache.Get(urlmd5).(string)
+		result.UrlShort = string(urlcache.Get(urlmd5).([]uint8))
 	} else {
 		result.UrlShort = models.Generate()
 		err := urlcache.Put(urlmd5, result.UrlShort, 0)

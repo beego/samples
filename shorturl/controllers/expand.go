@@ -13,7 +13,7 @@ func (this *ExpandController) Get() {
 	shorturl := this.Input().Get("shorturl")
 	result.UrlShort = shorturl
 	if urlcache.IsExist(shorturl) {
-		result.UrlLong = urlcache.Get(shorturl).(string)
+		result.UrlLong = string(urlcache.Get(shorturl).([]uint8))
 	} else {
 		result.UrlLong = ""
 	}
