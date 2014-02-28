@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	APP_VER = "0.1.0.1129"
+	APP_VER = "0.1.1.0227"
 )
 
 func main() {

@@ -3,7 +3,6 @@ var isWait = false;
 
 var fetch = function () {
     if (isWait) return;
-    console.log(isWait);
     isWait = true;
     $.getJSON("/lp/fetch?lastReceived=" + lastReceived, function (data) {
         if (data == null) return;

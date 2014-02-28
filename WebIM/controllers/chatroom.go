@@ -19,7 +19,7 @@ import (
 	"time"
 
 	"github.com/astaxie/beego"
-	"github.com/garyburd/go-websocket/websocket"
+	"github.com/gorilla/websocket"
 
 	"github.com/beego/samples/WebIM/models"
 )

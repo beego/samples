@@ -19,7 +19,7 @@ import (
 	"net/http"
 
 	"github.com/astaxie/beego"
-	"github.com/garyburd/go-websocket/websocket"
+	"github.com/gorilla/websocket"
 
 	"github.com/beego/samples/WebIM/models"
 )
@@ -52,7 +52,7 @@ func (this *WebSocketController) Join() {
 	}
 
 	// Upgrade from http request to WebSocket.
-	ws, err := websocket.Upgrade(this.Ctx.ResponseWriter, this.Ctx.Request.Header, nil, 1024, 1024)
+	ws, err := websocket.Upgrade(this.Ctx.ResponseWriter, this.Ctx.Request, nil, 1024, 1024)
 	if _, ok := err.(websocket.HandshakeError); ok {
 		http.Error(this.Ctx.ResponseWriter, "Not a websocket handshake", 400)
 		return
