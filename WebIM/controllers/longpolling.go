@@ -16,6 +16,7 @@ package controllers
 
 import (
 	"github.com/beego/samples/WebIM/models"
+	"html"
 )
 
 // LongPollingController handles long polling requests.
@@ -50,7 +51,7 @@ func (this *LongPollingController) Post() {
 		return
 	}
 
-	publish <- newEvent(models.EVENT_MESSAGE, uname, content)
+	publish <- newEvent(models.EVENT_MESSAGE, uname, html.EscapeString(content))
 }
 
 // Fetch method handles fetch archives requests for LongPollingController.
