@@ -92,9 +92,9 @@ func (this *AppController) Join() {
 	}
 
 	switch tech {
-	case "Long Polling", "长轮询":
+	case "longpolling":
 		this.Redirect("/lp?uname="+uname, 302)
-	case "WebSocket":
+	case "websocket":
 		this.Redirect("/ws?uname="+uname, 302)
 	default:
 		this.Redirect("/", 302)

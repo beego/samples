@@ -9,6 +9,7 @@
 <script src="/static/js/jquery-1.10.1.min.js"></script>
 {{if .IsLongPolling}}
 <script src="/static/js/longpolling.js"></script>
-{{else}}
+{{end}}
+{{if .IsWebSocket}}
 <script src="/static/js/websocket.js"></script>
 {{end}}
