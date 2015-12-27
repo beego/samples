@@ -3,7 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	"github.com/beego/samples/models"
+	"github.com/beego/samples/todo/models"
 	"strconv"
 	"strings"
 
