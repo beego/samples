@@ -19,5 +19,6 @@ func main() {
 	beego.Router("/task/:id:int", &controllers.TaskController{}, "get:GetTask;put:UpdateTask")
 
 	beego.Router("/post/", &controllers.PostController{}, "get:GetAll;post:Post")
+	beego.Router("/post/:id:int", &controllers.PostController{}, "get:GetOne;put:Put;delete:Delete")
 	beego.Run()
 }

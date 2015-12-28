@@ -61,5 +61,19 @@ function PostCtrl($scope, $http) {
       });
   };
 
+  $scope.delPost = function() {
+      $http.delete('/post/'+$scope.postText).
+        error(logError).
+        success(function() {
+        });
+    };
+
+    $scope.updatePost = function() {
+        $http.put('/post/'+$scope.postText, {Body: "hahaha"}).
+          error(logError).
+          success(function() {
+          });
+      };
+
   refresh().then(function() { });
 }
