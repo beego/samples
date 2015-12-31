@@ -2,3 +2,5 @@
 WebIM/WebIM
 *.exe
 *.exe~
+*/.idea/
+todo/todo.iml

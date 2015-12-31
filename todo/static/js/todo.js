@@ -40,3 +40,40 @@ function TaskCtrl($scope, $http) {
 
   refresh().then(function() { $scope.working = false; });
 }
+
+function PostCtrl($scope, $http) {
+  $scope.posts = [];
+
+  var logError = function(data, status) {
+    console.log('code '+status+': '+data);
+  };
+
+  var refresh = function() {
+    return $http.get('/post/').
+      success(function(data) { $scope.posts = data; }).
+      error(logError);
+  };
+
+  $scope.addPost = function() {
+    $http.post('/post/', {Title: $scope.postText}).
+      error(logError).
+      success(function() {
+      });
+  };
+
+  $scope.delPost = function() {
+      $http.delete('/post/'+$scope.postText).
+        error(logError).
+        success(function() {
+        });
+    };
+
+    $scope.updatePost = function() {
+        $http.put('/post/'+$scope.postText, {Body: "hahaha"}).
+          error(logError).
+          success(function() {
+          });
+      };
+
+  refresh().then(function() { });
+}
