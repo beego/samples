@@ -27,7 +27,7 @@ const (
 )
 
 func main() {
-	beego.Info(beego.AppName, APP_VER)
+	beego.Info(beego.BConfig.AppName, APP_VER)
 
 	// Register routers.
 	beego.Router("/", &controllers.AppController{})

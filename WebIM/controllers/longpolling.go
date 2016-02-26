@@ -35,14 +35,14 @@ func (this *LongPollingController) Join() {
 	// Join chat room.
 	Join(uname, nil)
 
-	this.TplNames = "longpolling.html"
+	this.TplName = "longpolling.html"
 	this.Data["IsLongPolling"] = true
 	this.Data["UserName"] = uname
 }
 
 // Post method handles receive messages requests for LongPollingController.
 func (this *LongPollingController) Post() {
-	this.TplNames = "longpolling.html"
+	this.TplName = "longpolling.html"
 
 	uname := this.GetString("uname")
 	content := this.GetString("content")
@@ -63,7 +63,7 @@ func (this *LongPollingController) Fetch() {
 	events := models.GetEvents(int(lastReceived))
 	if len(events) > 0 {
 		this.Data["json"] = events
-		this.ServeJson()
+		this.ServeJSON()
 		return
 	}
 
@@ -73,5 +73,5 @@ func (this *LongPollingController) Fetch() {
 	<-ch
 
 	this.Data["json"] = models.GetEvents(int(lastReceived))
-	this.ServeJson()
+	this.ServeJSON()
 }

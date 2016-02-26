@@ -38,7 +38,7 @@ func (this *WebSocketController) Get() {
 		return
 	}
 
-	this.TplNames = "websocket.html"
+	this.TplName = "websocket.html"
 	this.Data["IsWebSocket"] = true
 	this.Data["UserName"] = uname
 }
