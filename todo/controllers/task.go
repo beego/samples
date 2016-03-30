@@ -22,7 +22,7 @@ type TaskController struct {
 func (this *TaskController) ListTasks() {
 	res := struct{ Tasks []*models.Task }{models.DefaultTaskList.All()}
 	this.Data["json"] = res
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 // Examples:
@@ -67,7 +67,7 @@ func (this *TaskController) GetTask() {
 		return
 	}
 	this.Data["json"] = t
-	this.ServeJson()
+	this.ServeJSON()
 }
 
 // Example:
