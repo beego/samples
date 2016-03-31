@@ -16,6 +16,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"html"
 	"net/http"
 
 	"github.com/astaxie/beego"
@@ -71,7 +72,7 @@ func (this *WebSocketController) Join() {
 		if err != nil {
 			return
 		}
-		publish <- newEvent(models.EVENT_MESSAGE, uname, string(p))
+		publish <- newEvent(models.EVENT_MESSAGE, uname, html.EscapeString(string(p)))
 	}
 }
 
