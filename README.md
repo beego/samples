@@ -1,22 +1,22 @@
 # Beego samples
 
-Updated for v 1.6
-
 [中文文档](README_ZH.md)
 
-This is mainly for beego sample applications, you can either study how to use beego through this project, or open an issue to tell us what sample you expect, or even pull request with a sample.
+This is mainly for beego sample applications, you can either study how to use beego through this project, play around with it, open an issue to tell us what sample you expect, or even pull request with a sample.
+
+Updated for beego v1.6
 
 ## Installation
 
 Install [beego](http://beego.me/docs/install/)
 
-Fork https://github.com/beego/samples
+In github, Fork https://github.com/beego/samples
 
 ```
 # you should have set up your GOPATH by now
-cd GOPATH/src
+cd $GOPATH/src
+# now clone your forked repo.
 git clone https://github.com/yourname/samples
-go run main.go
 ```
 
 ## Samples

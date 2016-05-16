@@ -19,7 +19,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/beego/i18n"
 
-	"github.com/beego/samples/WebIM/controllers"
+	"samples/WebIM/controllers"
 )
 
 const (
