@@ -18,5 +18,5 @@ func (this *ExpandController) Get() {
 		result.UrlLong = ""
 	}
 	this.Data["json"] = result
-	this.ServeJson()
+	this.ServeJSON()
 }

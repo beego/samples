@@ -21,7 +21,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/gorilla/websocket"
 
-	"github.com/beego/samples/WebIM/models"
+	"samples/WebIM/models"
 )
 
 type Subscription struct {
