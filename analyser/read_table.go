@@ -1,4 +1,4 @@
-package main
+package analyser
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -22,24 +22,26 @@ func main() {
 	inputFile := "/tmp/batch-output.txt"
 	writeToFile(events, inputFile)
 	// analysePartsOfSpeech(inputFile)
-	analyseDependencies(inputFile)
+	AnalyseDependencies(inputFile)
 }
 
-func analyseDependencies(inputFile string) {
+func AnalyseDependencies(inputFile string) string {
 	// TODO: Push all constants to settings/config
 	var StanfordLibPath = "/Users/adi/Downloads/stanford-parser-full-2015-12-09/"
 	outputFile := "/tmp/batch-dep-output.txt"
 	parserLibs := []string{ "stanford-parser.jar", "stanford-parser-3.6.0-models.jar", "slf4j-api.jar"}
 	classPath := classPath(StanfordLibPath, parserLibs)
-	cmd := fmt.Sprintf("java -mx200m -cp %v edu.stanford.nlp.parser.lexparser.LexicalizedParser -retainTMPSubcategories -outputFormat 'wordsAndTags,penn,typedDependencies' edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz %v > %v", classPath, inputFile, outputFile)
-	printAndExec(cmd)
+	cmd := fmt.Sprintf("java -mx200m -cp %v edu.stanford.nlp.parser.lexparser.LexicalizedParser -retainTMPSubcategories -outputFormat 'wordsAndTags,penn,typedDependencies' edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz %v | tee %v", classPath, inputFile, outputFile)
+	out := PrintAndExec(cmd)
+	return string(out)
 }
 
-func printAndExec(cmd string) {
+func PrintAndExec(cmd string) string {
 	fmt.Printf("%v\n", cmd)
 	out, err := exec.Command("sh","-c",cmd).Output()
-	fmt.Printf("StdOut:%v\n", out)
-	fmt.Printf("StdErr:%v\n", err)
+	fmt.Printf("StdOut:%s\n", out)
+	fmt.Printf("StdErr:%s\n", err)
+	return string(out)
 }
 
 func classPath(root string, libs []string)(path string) {
@@ -56,8 +58,8 @@ func analysePartsOfSpeech(inputFile string) {
 	libs := filepath.Join(StanfordLibPath, "lib/*")
 	model := filepath.Join(StanfordLibPath, "models/english-bidirectional-distsim.tagger")
 	outputFile := "/tmp/batch-tagged-output.txt"
-	cmd := fmt.Sprintf("java -mx300m -classpath %v:%v edu.stanford.nlp.tagger.maxent.MaxentTagger -model %v -textFile %v > %v", mainJar, libs, model, inputFile, outputFile)
-	printAndExec(cmd)
+	cmd := fmt.Sprintf("java -mx300m -classpath %v:%v edu.stanford.nlp.tagger.maxent.MaxentTagger -model %v -textFile %v | tee %v", mainJar, libs, model, inputFile, outputFile)
+	PrintAndExec(cmd)
 }
 
 func writeToFile(events []models.Event, inputFile string) {

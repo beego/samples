@@ -36,10 +36,23 @@ type Event struct {
 	Content   string
 }
 
+type Attribute struct {
+	Id				uint `sql:"AUTO_INCREMENT" gorm:"primary_key"`
+	Known 		bool
+	Presence  bool // JOIN, LEAVE, MESSAGE
+	Value     string
+	Created 	int64// Unix timestamp (secs)
+	Modified 	int64// Unix timestamp (secs)
+}
+
+
+	var SingleAttributes []string = []string {"hall", "a/c", "fridge", "refrigerator", "parking", "generator", "invertor", "cupboards", "maintenance", "tv", "beds", "lift", "floor" }
+	var CompoundAttributes []string = []string {"modular kitchen"}
+
 func init() {
 	db, _ := gorm.Open("mysql", "newuser:password@/mb?charset=utf8&parseTime=True&loc=Local")
 	db.AutoMigrate(&Event{})
-
+	db.AutoMigrate(&Attribute{})
 }
 const archiveSize = 20
 
