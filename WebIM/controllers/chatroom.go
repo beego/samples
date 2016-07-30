@@ -17,12 +17,15 @@ package controllers
 import (
 	"container/list"
 	"time"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+
 
 	"github.com/astaxie/beego"
 	"github.com/gorilla/websocket"
-
 	"samples/WebIM/models"
 	"os"
+	"fmt"
 )
 
 type Subscription struct {
@@ -31,7 +34,7 @@ type Subscription struct {
 }
 
 func newEvent(ep models.EventType, user, msg string) models.Event {
-	return models.Event{ep, user, int(time.Now().Unix()), msg}
+	return models.Event{ep, user, time.Now().Unix(), msg}
 }
 
 func Join(user string, ws *websocket.Conn) {
@@ -83,6 +86,10 @@ func chatroom() {
 			models.NewArchive(event)
 
 			if event.Type == models.EVENT_MESSAGE {
+				db, err := gorm.Open("mysql", "newuser:password@/mb?charset=utf8&parseTime=True&loc=Local")
+				fmt.Printf("%v\n", err)
+				fmt.Printf("%v\n", db)
+
 				beego.Info("Message from", event.User, ";Content:", event.Content)
 				fo, err := os.Create("/tmp/output.txt")
 		    if err != nil {

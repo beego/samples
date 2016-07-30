@@ -16,6 +16,8 @@ package models
 
 import (
 	"container/list"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 type EventType int
@@ -29,10 +31,15 @@ const (
 type Event struct {
 	Type      EventType // JOIN, LEAVE, MESSAGE
 	User      string
-	Timestamp int // Unix timestamp (secs)
+	Timestamp int64// Unix timestamp (secs)
 	Content   string
 }
 
+func init() {
+	db, _ := gorm.Open("mysql", "newuser:password@/mb?charset=utf8&parseTime=True&loc=Local")
+	db.AutoMigrate(&Event{})
+
+}
 const archiveSize = 20
 
 // Event archives.
@@ -44,6 +51,8 @@ func NewArchive(event Event) {
 		archive.Remove(archive.Front())
 	}
 	archive.PushBack(event)
+	db, _ := gorm.Open("mysql", "newuser:password@/mb?charset=utf8&parseTime=True&loc=Local")
+	db.Create(&event)
 }
 
 // GetEvents returns all events after lastReceived.
@@ -51,7 +60,7 @@ func GetEvents(lastReceived int) []Event {
 	events := make([]Event, 0, archive.Len())
 	for event := archive.Front(); event != nil; event = event.Next() {
 		e := event.Value.(Event)
-		if e.Timestamp > int(lastReceived) {
+		if e.Timestamp > int64(lastReceived) {
 			events = append(events, e)
 		}
 	}
