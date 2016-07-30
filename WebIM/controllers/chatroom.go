@@ -121,38 +121,44 @@ func chatroom() {
 func updateAttributes(stdout string) {
 	li := list.New()
 	deps := strings.Split(stdout, "\n\n")[2]
-	fmt.Printf("%v\n", reflect.TypeOf(deps))
+	fmt.Printf("%v\n", deps)
 	for _, dep := range strings.Split(deps, "\n") {
-		subs, _ := regexp.MatchString("^([A-Za-z_\\-]+)\\(([A-Za-z\\-]+)\\-([0-9]+), ([A-Za-z_\\-]+)\\-([0-9]+)\\)$", dep)
-		r, _ := regexp.Compile("^([A-Za-z_\\-]+)\\(([A-Za-z\\-]+)\\-([0-9]+), ([A-Za-z_\\-]+)\\-([0-9]+)\\)$")
-		matches :=  r.FindStringSubmatch(dep)
-		parsedDep := Dependency {Type: matches[1], Members:[2]string{strings.ToLower(matches[2]), strings.ToLower(matches[4])}}
-		fmt.Printf("%v\n", subs)
-		fmt.Printf("%v\n", parsedDep)
-		li.PushBack(parsedDep)
+		subs, _ := regexp.MatchString("^([A-Za-z_\\-]+)\\(([A-Za-z\\-/]+)\\-([0-9]+), ([A-Za-z_\\-/]+)\\-([0-9]+)\\)$", dep)
+		fmt.Printf("Matching is: %v\n", subs)
+		if subs {
+			r, _ := regexp.Compile("^([A-Za-z_\\-]+)\\(([A-Za-z\\-/]+)\\-([0-9]+), ([A-Za-z_\\-/]+)\\-([0-9]+)\\)$")
+			matches :=  r.FindStringSubmatch(dep)
+			parsedDep := Dependency {Type: matches[1], Members:[2]string{strings.ToLower(matches[2]), strings.ToLower(matches[4])}}
+			li.PushBack(parsedDep)
+		}
 		// ^([A-Za-z_\-]+)\(([A-Za-z\-]+)\-([0-9]+), ([A-Za-z_\-]+)\-([0-9]+)\)$
 	}
 
 	for _, attr := range models.SingleAttributes {
 		fmt.Printf("%v\n", attr)
-		presence := isAttributePresent(li, attr)
-		fmt.Printf("Presence of %v: %v\n", attr, presence)
+		known, presence := isAttributePresent(li, attr)
+		fmt.Printf("Presence of %v: %v %v\n", attr, known, presence)
 	}
 
 }
 
-func isAttributePresent(li *list.List, attr string) bool {
+func isAttributePresent(li *list.List, attr string) (known bool, present bool) {
+	known = false
+	present = false
 	for e := li.Front(); e != nil; e = e.Next() {
 		dep, ok := (e.Value).(Dependency)
 		if ok {
-			if (dep.Type == "nsubj" && (dep.Members[0] == attr || dep.Members[1] == attr)) {
-				return true
+			if ((dep.Type == "cop" || dep.Type == "auxpass") && (dep.Members[0] == attr || dep.Members[1] == attr)) {
+				known = true
+				present = true
+				return
 			}
-
+		} else {
+			fmt.Printf("wth not of type Dependency!!%v\n", reflect.TypeOf(e.Value))
 		}
 		// do something with e.Value
 	}
-	return false
+	return
 }
 
 type Dependency struct {
@@ -179,10 +185,18 @@ func writeToFile(event models.Event, inputFile string) {
 func lemmatize(str string) string{
 	_, filename, _, _ := runtime.Caller(1)
 	f := path.Join(path.Dir(filename), "../helpers/lemmatizer.rb")
+	str = encode64(str)
+	attrStrings := encode64(strings.Join(models.SingleAttributes, " "))
+	return analyser.PrintAndExec(fmt.Sprintf("ruby %v %v base64 %v", f, str, attrStrings))
+}
+
+func encode64(str string) string {
 	data := []byte(strings.ToLower(str))
+	// base64 to avoid the pain from spaces
 	str = base64.StdEncoding.EncodeToString(data)
+
 	fmt.Printf("%v\n", str)
-	return analyser.PrintAndExec(fmt.Sprintf("ruby %v %v base64", f, str))
+	return str
 }
 
 func init() {
