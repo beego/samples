@@ -6,6 +6,7 @@ import (
 	"samples/WebIM/models"
 	"os"
 	"path/filepath"
+	"os/exec"
 )
 
 func main() {
@@ -17,19 +18,49 @@ func main() {
 	var events []models.Event
 	db.Find(&events)
 	fmt.Printf("%v\n", events)
-	writeToFile(events)
+	// TODO: Push to settings/config
+	inputFile := "/tmp/batch-output.txt"
+	writeToFile(events, inputFile)
+	// analysePartsOfSpeech(inputFile)
+	analyseDependencies(inputFile)
 }
 
-func writeToFile(events []models.Event) {
+func analyseDependencies(inputFile string) {
+	// TODO: Push all constants to settings/config
+	var StanfordLibPath = "/Users/adi/Downloads/stanford-parser-full-2015-12-09/"
+	outputFile := "/tmp/batch-dep-output.txt"
+	parserLibs := []string{ "stanford-parser.jar", "stanford-parser-3.6.0-models.jar", "slf4j-api.jar"}
+	classPath := classPath(StanfordLibPath, parserLibs)
+	cmd := fmt.Sprintf("java -mx200m -cp %v edu.stanford.nlp.parser.lexparser.LexicalizedParser -retainTMPSubcategories -outputFormat 'wordsAndTags,penn,typedDependencies' edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz %v > %v", classPath, inputFile, outputFile)
+	printAndExec(cmd)
+}
 
+func printAndExec(cmd string) {
+	fmt.Printf("%v\n", cmd)
+	out, err := exec.Command("sh","-c",cmd).Output()
+	fmt.Printf("StdOut:%v\n", out)
+	fmt.Printf("StdErr:%v\n", err)
+}
+
+func classPath(root string, libs []string)(path string) {
+	for _, lib := range libs {
+		path += filepath.Join(root, lib) + ":"
+	}
+	return path
+}
+
+func analysePartsOfSpeech(inputFile string) {
+	// TODO: Push all constants to settings/config
 	var StanfordLibPath = "/Users/adi/Downloads/stanford-postagger-2015-12-09/"
 	mainJar  := filepath.Join(StanfordLibPath, "stanford-postagger.jar")
 	libs := filepath.Join(StanfordLibPath, "lib/*")
 	model := filepath.Join(StanfordLibPath, "models/english-bidirectional-distsim.tagger")
-	inputFile := "/tmp/batch-output.txt"
 	outputFile := "/tmp/batch-tagged-output.txt"
 	cmd := fmt.Sprintf("java -mx300m -classpath %v:%v edu.stanford.nlp.tagger.maxent.MaxentTagger -model %v -textFile %v > %v", mainJar, libs, model, inputFile, outputFile)
-	fmt.Printf("%v\n", cmd)
+	printAndExec(cmd)
+}
+
+func writeToFile(events []models.Event, inputFile string) {
 
 	fo, err := os.Create(inputFile)
 	if err != nil {
