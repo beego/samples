@@ -179,8 +179,8 @@ func writeToFile(event models.Event, inputFile string) {
 func lemmatize(str string) string{
 	_, filename, _, _ := runtime.Caller(1)
 	f := path.Join(path.Dir(filename), "../helpers/lemmatizer.rb")
-	// data := []byte(strings.ToLower(str))
-	str = base64.StdEncoding.EncodeToString([]byte("there are many shops"))
+	data := []byte(strings.ToLower(str))
+	str = base64.StdEncoding.EncodeToString(data)
 	fmt.Printf("%v\n", str)
 	return analyser.PrintAndExec(fmt.Sprintf("ruby %v %v base64", f, str))
 }
