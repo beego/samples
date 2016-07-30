@@ -18,8 +18,10 @@ package main
 import (
 	"github.com/astaxie/beego"
 	"github.com/beego/i18n"
-
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"samples/WebIM/controllers"
+	"fmt"
 )
 
 const (
@@ -27,6 +29,10 @@ const (
 )
 
 func main() {
+	db, err := gorm.Open("mysql", "newuser:password@/mb?charset=utf8&parseTime=True&loc=Local")
+	fmt.Printf("%v\n", err)
+	fmt.Printf("%v\n", db)
+
 	beego.Info(beego.BConfig.AppName, APP_VER)
 
 	// Register routers.
