@@ -138,6 +138,10 @@ func updateAttributes(stdout string) {
 		fmt.Printf("%v\n", attr)
 		known, presence := isAttributePresent(li, attr)
 		fmt.Printf("Presence of %v: %v %v\n", attr, known, presence)
+		if known && presence {
+			models.Attribute{0, attr, known, presence, "", time.Now().Unix(), time.Now().Unix()}.UpdateDb()
+		}
+
 	}
 
 }
@@ -148,7 +152,7 @@ func isAttributePresent(li *list.List, attr string) (known bool, present bool) {
 	for e := li.Front(); e != nil; e = e.Next() {
 		dep, ok := (e.Value).(Dependency)
 		if ok {
-			if ((dep.Type == "cop" || dep.Type == "auxpass") && (dep.Members[0] == attr || dep.Members[1] == attr)) {
+			if ((dep.Type == "cop" || dep.Type == "auxpass") && (dep.Members[0] == attr || dep.Members[1] == attr)) || (dep.Type == "dobj" && (dep.Members[0] == attr || dep.Members[1] == attr)) {
 				known = true
 				present = true
 				return

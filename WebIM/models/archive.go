@@ -18,6 +18,7 @@ import (
 	"container/list"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"fmt"
 )
 
 type EventType int
@@ -37,7 +38,8 @@ type Event struct {
 }
 
 type Attribute struct {
-	Id				uint `sql:"AUTO_INCREMENT" gorm:"primary_key"`
+	Id				uint `sql:"AUTO_INCREMENT"`
+	Name			string `gorm:"primary_key"`
 	Known 		bool
 	Presence  bool // JOIN, LEAVE, MESSAGE
 	Value     string
@@ -45,6 +47,31 @@ type Attribute struct {
 	Modified 	int64// Unix timestamp (secs)
 }
 
+func (this Attribute) UpdateDb() {
+	// if record is present
+	// else
+
+	db, _ := gorm.Open("mysql", "newuser:password@/mb?charset=utf8&parseTime=True&loc=Local")
+	var attribute Attribute
+	db.Where("name = ?", this.Name).First(&attribute)
+	fmt.Printf("Old attrs: %v\n", attribute)
+	fmt.Printf("New attrs: %v\n", this)
+	// new record
+	if attribute.Id == 0 {
+		db.Create(&this)
+		return
+	}
+	if (attribute.Known == this.Known && attribute.Presence == this.Presence) {
+		// no need to update
+	} else {
+		attribute.Known = this.Known
+		attribute.Presence = this.Presence
+		this.Modified = attribute.Modified
+		db.Save(&attribute)
+	}
+	// db.Create(&this)
+
+}
 
 	var SingleAttributes []string = []string {"hall", "a/c", "fridge", "refrigerator", "parking", "generator", "invertor", "cupboards", "maintenance", "tv", "beds", "lift", "floor" }
 	var CompoundAttributes []string = []string {"modular kitchen"}
