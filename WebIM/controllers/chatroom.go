@@ -22,6 +22,7 @@ import (
 	"github.com/gorilla/websocket"
 
 	"samples/WebIM/models"
+	"os"
 )
 
 type Subscription struct {
@@ -83,6 +84,19 @@ func chatroom() {
 
 			if event.Type == models.EVENT_MESSAGE {
 				beego.Info("Message from", event.User, ";Content:", event.Content)
+				fo, err := os.Create("/tmp/output.txt")
+		    if err != nil {
+		        panic(err)
+		    }
+		    // close fo on exit and check for its returned error
+		    defer func() {
+		        if err := fo.Close(); err != nil {
+		            panic(err)
+		        }
+		    }()
+				if _, err := fo.WriteString(event.User + "_USER " + event.Content + "\n"); err != nil {
+            panic(err)
+        }
 			}
 		case unsub := <-unsubscribe:
 			for sub := subscribers.Front(); sub != nil; sub = sub.Next() {
