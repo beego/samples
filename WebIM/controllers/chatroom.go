@@ -34,7 +34,7 @@ type Subscription struct {
 }
 
 func newEvent(ep models.EventType, user, msg string) models.Event {
-	return models.Event{ep, user, time.Now().Unix(), msg}
+	return models.Event{0, ep, user, time.Now().Unix(), msg}
 }
 
 func Join(user string, ws *websocket.Conn) {

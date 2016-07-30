@@ -29,6 +29,7 @@ const (
 )
 
 type Event struct {
+	Id				uint `sql:"AUTO_INCREMENT" gorm:"primary_key"`
 	Type      EventType // JOIN, LEAVE, MESSAGE
 	User      string
 	Timestamp int64// Unix timestamp (secs)
