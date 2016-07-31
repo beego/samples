@@ -49,6 +49,8 @@ func main() {
 	beego.Router("/ws", &controllers.WebSocketController{})
 	beego.Router("/ws/join", &controllers.WebSocketController{}, "get:Join")
 
+	beego.Router("/attributes/list", &controllers.AttributesController{}, "get:Get")
+
 	// Register template functions.
 	beego.AddFuncMap("i18n", i18n.Tr)
 
