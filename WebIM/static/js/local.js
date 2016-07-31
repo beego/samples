@@ -14,7 +14,7 @@ $( document ).ready(function doPoll() {
       } else {
         color = "#FFBBBB";
       }
-      items.push( "<button class='btn btn-default' id='" + key + "' style='background-color:" + color + "'>" + capitalizeFirstLetter(val.Name) + "</button>" );
+      items.push( "<div class='col-xs-6'><button class='btn btn-default' id='" + key + "' style='width:200px;background-color:" + color + "'>" + capitalizeFirstLetter(val.Name) + "</button></div>" );
     }
 
   });
