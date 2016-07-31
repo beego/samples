@@ -19,7 +19,6 @@ import (
 	"time"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-
 	"github.com/astaxie/beego"
 	"github.com/gorilla/websocket"
 	"samples/WebIM/models"
@@ -148,20 +147,35 @@ func updateAttributes(stdout string) {
 func isAttributePresent(li *list.List, attr string) (known bool, present bool) {
 	known = false
 	present = false
+	negative := hasNegative(li)
 	for e := li.Front(); e != nil; e = e.Next() {
 		dep, ok := (e.Value).(Dependency)
 		if ok {
 			if (checkAttribute(dep, attr)) {
-				known = true
-				present = true
+				if (negative) {
+					known = true
+					present = false
+				} else {
+					known = true
+					present = true
+				}
 				return
 			}
 		} else {
 			fmt.Printf("wth not of type Dependency!!%v\n", reflect.TypeOf(e.Value))
 		}
-		// do something with e.Value
 	}
 	return
+}
+
+func hasNegative(li *list.List) bool {
+	for e := li.Front(); e != nil; e = e.Next() {
+		dep, ok := (e.Value).(Dependency)
+		if ok && dep.Type == "neg" {
+			return true
+		}
+	}
+	return false
 }
 
 func checkAttribute(dep Dependency, attr string) bool {

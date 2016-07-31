@@ -38,7 +38,7 @@ type Event struct {
 }
 
 type Attribute struct {
-	Id				uint `sql:"AUTO_INCREMENT"`
+	Id				uint 		`gorm:"AUTO_INCREMENT"`
 	Name			string `gorm:"primary_key"`
 	Known 		bool
 	Presence  bool // JOIN, LEAVE, MESSAGE
@@ -48,7 +48,6 @@ type Attribute struct {
 }
 
 func ConnectDB() *gorm.DB {
-
 		db, _ := gorm.Open("mysql", "root:@/mb?charset=utf8&parseTime=True&loc=Local")
 		return db
 }
