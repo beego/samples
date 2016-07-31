@@ -1,3 +1,6 @@
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 $( document ).ready(function doPoll() {
   console.log('ready');
   $.getJSON("/attributes/list", function( data ) {
@@ -11,7 +14,7 @@ $( document ).ready(function doPoll() {
       } else {
         color = "#FFBBBB";
       }
-      items.push( "<button class='btn btn-default' id='" + key + "' style='background-color:" + color + "'>" + JSON.stringify(val.Name) + "</button>" );
+      items.push( "<button class='btn btn-default' id='" + key + "' style='background-color:" + color + "'>" + capitalizeFirstLetter(val.Name) + "</button>" );
     }
 
   });

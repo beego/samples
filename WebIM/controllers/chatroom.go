@@ -138,10 +138,9 @@ func updateAttributes(stdout string) {
 		fmt.Printf("%v\n", attr)
 		known, presence := isAttributePresent(li, attr)
 		fmt.Printf("Presence of %v: %v %v\n", attr, known, presence)
-		if known && presence {
+		if known {
 			models.Attribute{0, attr, known, presence, "", time.Now().Unix(), time.Now().Unix()}.UpdateDb()
 		}
-
 	}
 
 }
@@ -152,7 +151,7 @@ func isAttributePresent(li *list.List, attr string) (known bool, present bool) {
 	for e := li.Front(); e != nil; e = e.Next() {
 		dep, ok := (e.Value).(Dependency)
 		if ok {
-			if ((dep.Type == "cop" || dep.Type == "auxpass") && (dep.Members[0] == attr || dep.Members[1] == attr)) || (dep.Type == "dobj" && (dep.Members[0] == attr || dep.Members[1] == attr)) {
+			if (checkAttribute(dep, attr)) {
 				known = true
 				present = true
 				return
@@ -163,6 +162,12 @@ func isAttributePresent(li *list.List, attr string) (known bool, present bool) {
 		// do something with e.Value
 	}
 	return
+}
+
+func checkAttribute(dep Dependency, attr string) bool {
+	return ((dep.Type == "cop" || dep.Type == "auxpass") && (dep.Members[0] == attr || dep.Members[1] == attr)) ||
+	(dep.Type == "dobj" && (dep.Members[0] == attr || dep.Members[1] == attr)) ||
+	(dep.Members[0] == attr && dep.Members[1] == "be" ) || (dep.Members[1] == attr && dep.Members[0] == "be" )
 }
 
 type Dependency struct {
