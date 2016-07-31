@@ -47,18 +47,23 @@ type Attribute struct {
 	Modified 	int64// Unix timestamp (secs)
 }
 
+func ConnectDB() *gorm.DB {
+
+		db, _ := gorm.Open("mysql", "root:@/mb?charset=utf8&parseTime=True&loc=Local")
+		return db
+}
+var Db *gorm.DB
 func (this Attribute) UpdateDb() {
 	// if record is present
 	// else
 
-	db, _ := gorm.Open("mysql", "newuser:password@/mb?charset=utf8&parseTime=True&loc=Local")
 	var attribute Attribute
-	db.Where("name = ?", this.Name).First(&attribute)
+	Db.Where("name = ?", this.Name).First(&attribute)
 	fmt.Printf("Old attrs: %v\n", attribute)
 	fmt.Printf("New attrs: %v\n", this)
 	// new record
 	if attribute.Id == 0 {
-		db.Create(&this)
+		Db.Create(&this)
 		return
 	}
 	if (attribute.Known == this.Known && attribute.Presence == this.Presence) {
@@ -67,7 +72,7 @@ func (this Attribute) UpdateDb() {
 		attribute.Known = this.Known
 		attribute.Presence = this.Presence
 		this.Modified = attribute.Modified
-		db.Save(&attribute)
+		Db.Save(&attribute)
 	}
 	// db.Create(&this)
 
@@ -77,9 +82,9 @@ func (this Attribute) UpdateDb() {
 	var CompoundAttributes []string = []string {"modular kitchen"}
 
 func init() {
-	db, _ := gorm.Open("mysql", "newuser:password@/mb?charset=utf8&parseTime=True&loc=Local")
-	db.AutoMigrate(&Event{})
-	db.AutoMigrate(&Attribute{})
+	Db = ConnectDB()
+	Db.AutoMigrate(&Event{})
+	Db.AutoMigrate(&Attribute{})
 }
 const archiveSize = 20
 
@@ -92,8 +97,8 @@ func NewArchive(event Event) {
 		archive.Remove(archive.Front())
 	}
 	archive.PushBack(event)
-	db, _ := gorm.Open("mysql", "newuser:password@/mb?charset=utf8&parseTime=True&loc=Local")
-	db.Create(&event)
+
+	Db.Create(&event)
 }
 
 // GetEvents returns all events after lastReceived.

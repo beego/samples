@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"github.com/jinzhu/gorm"
 	 _ "github.com/jinzhu/gorm/dialects/mysql"
 	 "samples/WebIM/models"
 
@@ -19,7 +18,7 @@ type AttributesController struct {
 // Get method handles GET requests for AttributeController.
 func (this *AttributesController) Get() {
 	// Safe check.
- 	db, _ := gorm.Open("mysql", "newuser:password@/mb?charset=utf8&parseTime=True&loc=Local")
+ 	db := models.Db
  	var attributes []models.Attribute
  	db.Find(&attributes)
 

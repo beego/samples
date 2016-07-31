@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open("mysql", "newuser:password@/mb?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "root/:@/mb?charset=utf8&parseTime=True&loc=Local")
 	fmt.Printf("%v\n", err)
 	fmt.Printf("%v\n", db)
 	fmt.Printf("%v\n", db.HasTable("events"))
