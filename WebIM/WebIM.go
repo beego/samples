@@ -18,7 +18,7 @@ package main
 import (
 	"github.com/astaxie/beego"
 	"github.com/beego/i18n"
-
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"samples/WebIM/controllers"
 )
 
@@ -27,6 +27,7 @@ const (
 )
 
 func main() {
+
 	beego.Info(beego.BConfig.AppName, APP_VER)
 
 	// Register routers.
@@ -42,6 +43,8 @@ func main() {
 	// WebSocket.
 	beego.Router("/ws", &controllers.WebSocketController{})
 	beego.Router("/ws/join", &controllers.WebSocketController{}, "get:Join")
+
+	beego.Router("/attributes/list", &controllers.AttributesController{}, "get:Get")
 
 	// Register template functions.
 	beego.AddFuncMap("i18n", i18n.Tr)

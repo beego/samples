@@ -16,7 +16,7 @@ package controllers
 
 import (
 	"strings"
-
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/astaxie/beego"
 	"github.com/beego/i18n"
 )
