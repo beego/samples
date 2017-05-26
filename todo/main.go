@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/astaxie/beego"
-	"samples/todo/controllers"
+	"github.com/bseehra/samples/todo/controllers"
 )
 
 func main() {
@@ -10,4 +10,5 @@ func main() {
 	beego.Router("/task/", &controllers.TaskController{}, "get:ListTasks;post:NewTask")
 	beego.Router("/task/:id:int", &controllers.TaskController{}, "get:GetTask;put:UpdateTask")
 	beego.Run()
+
 }

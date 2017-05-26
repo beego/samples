@@ -11,7 +11,7 @@ var (
 )
 
 func init() {
-	urlcache, _ = cache.NewCache("memory", `{"interval":0}`)
+	urlcache, _ = cache.NewCache("file", `{"CachePath":"./cache","FileSuffix":".cache","DirectoryLevel":2,"EmbedExpiry":120}`)
 }
 
 type ShortResult struct {
