@@ -18,8 +18,7 @@ package main
 import (
 	"github.com/astaxie/beego"
 	"github.com/beego/i18n"
-
-	"samples/WebIM/controllers"
+	"github.com/beego/samples/WebIM/controllers"
 )
 
 const (
