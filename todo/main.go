@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/astaxie/beego"
-	"samples/todo/controllers"
+	"github.com/beego/samples/todo/controllers"
 )
 
 func main() {
