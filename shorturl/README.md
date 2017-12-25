@@ -26,7 +26,7 @@ http://localhost:8080/v1/shorten/?longurl=http://google.com
 }
 
 # expanding url example
-http://localhost:8080/v1/expand/?shorturl=5laZI
+http://localhost:8080/v1/expand/?shorturl=5laZG
 
 {
   "UrlShort": "5laZG",
