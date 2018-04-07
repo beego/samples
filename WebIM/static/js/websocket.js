@@ -6,22 +6,36 @@ $(document).ready(function () {
     // Message received on the socket
     socket.onmessage = function (event) {
         var data = JSON.parse(event.data);
+        var li = document.createElement('li');
+
         console.log(data);
+
         switch (data.Type) {
         case 0: // JOIN
             if (data.User == $('#uname').text()) {
-                $("#chatbox li").first().before("<li>You joined the chat room.</li>");
+                li.innerText = 'You joined the chat room.';
             } else {
-                $("#chatbox li").first().before("<li>" + data.User + " joined the chat room.</li>");
+                li.innerText = data.User + ' joined the chat room.';
             }
             break;
         case 1: // LEAVE
-            $("#chatbox li").first().before("<li>" + data.User + " left the chat room.</li>");
+            li.innerText = data.User + ' left the chat room.';
             break;
         case 2: // MESSAGE
-            $("#chatbox li").first().before("<li><b>" + data.User + "</b>: " + data.Content + "</li>");
+            var username = document.createElement('strong');
+            var content = document.createElement('span');
+
+            username.innerText = data.User;
+            content.innerText = data.Content;
+
+            li.appendChild(username);
+            li.appendChild(document.createTextNode(': '));
+            li.appendChild(content);
+
             break;
         }
+
+        $('#chatbox li').first().before(li);
     };
 
     // Send messages.
@@ -29,7 +43,7 @@ $(document).ready(function () {
         var uname = $('#uname').text();
         var content = $('#sendbox').val();
         socket.send(content);
-        $('#sendbox').val("");
+        $('#sendbox').val('');
     }
 
     $('#sendbtn').click(function () {
