@@ -72,7 +72,7 @@ func chatroom() {
 			}
 		case event := <-publish:
 			// Notify waiting list.
-			for ch := waitingList.Back(); ch != nil; ch = ch.Prev() {
+			for ch := waitingList.Back(); ch != nil; ch = waitingList.Front() {
 				ch.Value.(chan bool) <- true
 				waitingList.Remove(ch)
 			}
