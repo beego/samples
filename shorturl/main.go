@@ -1,8 +1,9 @@
 package main
 
 import (
+	"samples/shorturl/controllers"
+
 	"github.com/astaxie/beego"
-	"github.com/beego/samples/shorturl/controllers"
 )
 
 func main() {

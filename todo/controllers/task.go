@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"strconv"
 
+	"samples/todo/models"
+
 	"github.com/astaxie/beego"
-	"github.com/beego/samples/todo/models"
+	"github.com/astaxie/beego/logs"
 )
 
 type TaskController struct {
@@ -57,10 +59,10 @@ func (this *TaskController) NewTask() {
 //   res: 404 task not found
 func (this *TaskController) GetTask() {
 	id := this.Ctx.Input.Param(":id")
-	beego.Info("Task is ", id)
+	logs.Info("Task is ", id)
 	intid, _ := strconv.ParseInt(id, 10, 64)
 	t, ok := models.DefaultTaskList.Find(intid)
-	beego.Info("Found", ok)
+	logs.Info("Found", ok)
 	if !ok {
 		this.Ctx.Output.SetStatus(404)
 		this.Ctx.Output.Body([]byte("task not found"))
@@ -79,7 +81,7 @@ func (this *TaskController) GetTask() {
 //   res: 400 inconsistent task IDs
 func (this *TaskController) UpdateTask() {
 	id := this.Ctx.Input.Param(":id")
-	beego.Info("Task is ", id)
+	logs.Info("Task is ", id)
 	intid, _ := strconv.ParseInt(id, 10, 64)
 	var t models.Task
 	if err := json.Unmarshal(this.Ctx.Input.RequestBody, &t); err != nil {

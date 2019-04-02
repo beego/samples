@@ -1,8 +1,9 @@
 package main
 
 import (
+	"samples/todo/controllers"
+
 	"github.com/astaxie/beego"
-	"github.com/beego/samples/todo/controllers"
 )
 
 func main() {

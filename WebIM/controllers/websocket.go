@@ -18,9 +18,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/astaxie/beego"
+	"samples/WebIM/models"
+
+	"github.com/astaxie/beego/logs"
 	"github.com/gorilla/websocket"
-	"github.com/beego/samples/WebIM/models"
 )
 
 // WebSocketController handles WebSocket requests.
@@ -56,7 +57,7 @@ func (this *WebSocketController) Join() {
 		http.Error(this.Ctx.ResponseWriter, "Not a websocket handshake", 400)
 		return
 	} else if err != nil {
-		beego.Error("Cannot setup WebSocket connection:", err)
+		logs.Error("Cannot setup WebSocket connection:", err)
 		return
 	}
 
@@ -78,7 +79,7 @@ func (this *WebSocketController) Join() {
 func broadcastWebSocket(event models.Event) {
 	data, err := json.Marshal(event)
 	if err != nil {
-		beego.Error("Fail to marshal event:", err)
+		logs.Error("Fail to marshal event:", err)
 		return
 	}
 

@@ -16,9 +16,11 @@
 package main
 
 import (
+	_ "samples/WebIM/routers"
+
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 	"github.com/beego/i18n"
-	_ "github.com/beego/samples/WebIM/routers"
 )
 
 const (
@@ -26,7 +28,7 @@ const (
 )
 
 func main() {
-	beego.Info(beego.BConfig.AppName, APP_VER)
+	logs.Info(beego.BConfig.AppName, APP_VER)
 
 	// Register template functions.
 	beego.AddFuncMap("i18n", i18n.Tr)

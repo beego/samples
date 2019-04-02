@@ -18,9 +18,10 @@ import (
 	"container/list"
 	"time"
 
-	"github.com/astaxie/beego"
+	"samples/WebIM/models"
+
+	"github.com/astaxie/beego/logs"
 	"github.com/gorilla/websocket"
-	"github.com/beego/samples/WebIM/models"
 )
 
 type Subscription struct {
@@ -66,9 +67,9 @@ func chatroom() {
 				subscribers.PushBack(sub) // Add user to the end of list.
 				// Publish a JOIN event.
 				publish <- newEvent(models.EVENT_JOIN, sub.Name, "")
-				beego.Info("New user:", sub.Name, ";WebSocket:", sub.Conn != nil)
+				logs.Info("New user:", sub.Name, ";WebSocket:", sub.Conn != nil)
 			} else {
-				beego.Info("Old user:", sub.Name, ";WebSocket:", sub.Conn != nil)
+				logs.Info("Old user:", sub.Name, ";WebSocket:", sub.Conn != nil)
 			}
 		case event := <-publish:
 			// Notify waiting list.
@@ -81,7 +82,7 @@ func chatroom() {
 			models.NewArchive(event)
 
 			if event.Type == models.EVENT_MESSAGE {
-				beego.Info("Message from", event.User, ";Content:", event.Content)
+				logs.Info("Message from", event.User, ";Content:", event.Content)
 			}
 		case unsub := <-unsubscribe:
 			for sub := subscribers.Front(); sub != nil; sub = sub.Next() {
@@ -91,7 +92,7 @@ func chatroom() {
 					ws := sub.Value.(Subscriber).Conn
 					if ws != nil {
 						ws.Close()
-						beego.Error("WebSocket closed:", unsub)
+						logs.Error("WebSocket closed:", unsub)
 					}
 					publish <- newEvent(models.EVENT_LEAVE, unsub, "") // Publish a LEAVE event.
 					break
