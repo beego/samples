@@ -9,7 +9,7 @@ This sample is about using long polling and WebSocket to build a web-based chat 
 ## Installation
 
 ```
-cd $GOPATH/src/samples/WebIm
+cd $GOPATH/src/beego/samples/WebIm
 go get github.com/gorilla/websocket
 go get github.com/beego/i18n
 bee run
