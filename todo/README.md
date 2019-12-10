@@ -5,7 +5,7 @@ angularJS + beego demo
 ## Installation
 
 ```
-cd $GOPATH/src/samples/todo
+cd $GOPATH/src/github.com/beego/samples/todo
 bee run
 ```
 
