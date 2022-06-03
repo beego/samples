@@ -68,6 +68,7 @@ func (this *WebSocketController) Join() {
 	for {
 		_, p, err := ws.ReadMessage()
 		if err != nil {
+			this.Abort("200")
 			return
 		}
 		publish <- newEvent(models.EVENT_MESSAGE, uname, string(p))
